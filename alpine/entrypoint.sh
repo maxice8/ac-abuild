@@ -22,7 +22,7 @@ fi
 sudo install -d -m775 -g abuild /var/cache/distfiles
 
 for vpath in /home/builder/.abuild /home/builder/packages; do
-	[ -d "$vpath" ] && sudo chown builder:users "$vpath"
+	[ -d "$vpath" ] && sudo chown -R builder:users "$vpath"
 done
 
 sudo cp -v "$HOME"/.abuild/*.rsa.pub /etc/apk/keys/
