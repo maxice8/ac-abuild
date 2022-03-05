@@ -1,0 +1,5 @@
+#!/bin/sh
+podman build \
+	--no-cache \
+	--tag alpine-dev-env:edge-"$(uname -m)" \
+	--file ./Dockerfile
