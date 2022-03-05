@@ -1,5 +1,5 @@
 #!/bin/sh
 podman build \
 	--no-cache \
-	--tag alpine-container-abuild:edge-"$(uname -m)" \
+	--tag maxice8/alpine-container-abuild:edge-"$(uname -m)" \
 	--file ./Dockerfile
