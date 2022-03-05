@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+set -u
+
+die() {
+	echo "$1" >&2
+	exit 1
+}
+
+printf '%s' "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" \
+	--password-stdin || die "Failed to login to docker hub"
+
+docker push maxice8/alpine-container-abuild:edge-$(uname -m) || \
+	die "Failed to push 'alpine-container-abuild:edge-$(uname -m)'"
