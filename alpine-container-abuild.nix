@@ -41,5 +41,5 @@ ${pkgs.podman}/bin/podman run --tty --interactive \
   --userns=keep-id \
   --rm \
   --workdir /home/builder/aports/"''${PWD#*/aports/}" \
-  alpine-container-abuild:edge-$DABUILD_ARCH "$@"
+  docker.io/maxice8/alpine-container-abuild:edge-$DABUILD_ARCH "$@"
 ''
