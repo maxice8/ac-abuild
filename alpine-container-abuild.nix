@@ -1,9 +1,9 @@
-{ pkgs, other }:
+{ pkgs, alpine-image }:
 pkgs.writeShellScriptBin "alpine-container-abuild"
 ''
 : "''${DABUILD_ARCH:=$(${pkgs.coreutils}/bin/uname -m)}"
 : "''${DABUILD_PACKAGES:=''${PWD%/aports/*}/packages}}"
-: "''${IMAGE_HASH:=$(basename ${other.alpine-image} | cut -d - -f 1)}"
+: "''${IMAGE_HASH:=$(basename ${alpine-image} | cut -d - -f 1)}"
 
 die() {
   printf >&2 "%s\\n" "$@"
@@ -43,7 +43,7 @@ setup_named_volume config "/home/builder/.abuild" true
 # Docker images -q will print the ID of the image if it exists
 # otherwise it will print 
 if [ "$(${pkgs.podman}/bin/podman images -q alpine-container-abuild:$IMAGE_HASH 2>/dev/null)" = "" ]; then
-  ${pkgs.podman}/bin/podman load -i ${other.alpine-image}
+  ${pkgs.podman}/bin/podman load -i ${alpine-image}
 fi
 
 ${pkgs.podman}/bin/podman run --tty --interactive \
