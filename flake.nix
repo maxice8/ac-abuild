@@ -18,7 +18,8 @@
     in
     {
       shell-utils = pkgs.callPackage ./shell-utils.nix { other = other; };
-      alpine-container-abuild = pkgs.callPackage ./alpine-container-abuild.nix {};
+      alpine-container-abuild = pkgs.callPackage ./alpine-container-abuild.nix { other = other; };
+      alpine-image = pkgs.callPackage ./alpine/image.nix {};
     });
 
     overlays = forAllSystems (system:
@@ -37,6 +38,7 @@
           ];
       };
       alpine-container-abuild = our.alpine-container-abuild;
+      alpine-image = our.alpine-image;
     });
   };
 }
