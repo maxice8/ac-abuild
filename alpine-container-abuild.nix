@@ -1,9 +1,15 @@
 { pkgs, alpine-image }:
 pkgs.writeShellScriptBin "alpine-container-abuild"
 ''
+set -e
+set -u
+
 : "''${DABUILD_ARCH:=$(${pkgs.coreutils}/bin/uname -m)}"
 : "''${DABUILD_PACKAGES:=''${PWD%/aports/*}/packages}}"
 : "''${IMAGE_HASH:=$(basename ${alpine-image} | cut -d - -f 1)}"
+: "''${APORTSDIR:="$PWD"}"
+
+APORTSDIRNAME="$(${pkgs.coreutils}/bin/basename "$APORTSDIR")"
 
 die() {
   printf >&2 "%s\\n" "$@"
@@ -11,14 +17,14 @@ die() {
 }
 
 ## check running from within an `aports` tree
-if [ "''${PWD%*/aports/*}" = "$PWD" ]; then
+if [ "''${PWD%*/$APORTSDIRNAME/*}" = "$PWD" ]; then
   die "Error: expecting to be run from within an aports tree!" \
-    "Could not find '/aports/' in the current path: $PWD"
+    "Could not find '/aports/' in the current path: $APORTSDIR"
 fi
 
 DABUILD_PACKAGES="$DABUILD_PACKAGES/edge"
 
-ABUILD_VOLUMES="-v ''${PWD%/aports/*}/aports:/home/builder/aports:Z \
+ABUILD_VOLUMES="-v ''${PWD%/$APORTSDIRNAME/*}/aports:/home/builder/aports:Z \
   -v $DABUILD_PACKAGES:/home/builder/packages:Z"
 
 if [ -f "$HOME/.gitconfig" ]; then
@@ -42,7 +48,7 @@ setup_named_volume config "/home/builder/.abuild" true
 #
 # Docker images -q will print the ID of the image if it exists
 # otherwise it will print 
-if [ "$(${pkgs.podman}/bin/podman images -q alpine-container-abuild:$IMAGE_HASH 2>/dev/null)" = "" ]; then
+if [ "$(${pkgs.podman}/bin/podman images -q alpine-container-abuild:"$IMAGE_HASH" 2>/dev/null)" = "" ]; then
   ${pkgs.podman}/bin/podman load -i ${alpine-image}
 fi
 
@@ -50,6 +56,6 @@ ${pkgs.podman}/bin/podman run --tty --interactive \
   $ABUILD_VOLUMES \
   --userns=keep-id \
   --rm \
-  --workdir /home/builder/aports/"''${PWD#*/aports/}" \
-  alpine-container-abuild:$IMAGE_HASH "$@"
+  --workdir /home/builder/aports/"''${PWD#*/$APORTSDIRNAME/}" \
+  alpine-container-abuild:"$IMAGE_HASH" "$@"
 ''
