@@ -126,7 +126,7 @@ for repo in main community testing unmaintained non-free; do
 done
 ${printerr-src}/bin/printerr no aport named "$1"
 '';
-an-src = pkgs.writeShellScript "an"
+an-src = pkgs.writeShellScriptBin "an"
 ''
 : "''${APORTSDIR:=$PWD}"
 : "''${FILEMANAGER:=${pkgs.ranger}/bin/ranger}"
