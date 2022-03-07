@@ -126,6 +126,33 @@ for repo in main community testing unmaintained non-free; do
 done
 ${printerr-src}/bin/printerr no aport named "$1"
 '';
+an-src = pkgs.writeShellScript "an"
+''
+: "''${APORTSDIR:=$PWD}"
+: "''${FILEMANAGER:=${pkgs.ranger}/bin/ranger}"
+
+# switch to APORTSDIR
+cd "$APORTSDIR"
+
+[ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+
+prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
+
+if [ -n "$prefix" ]; then
+  set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+fi
+
+for repo in main community testing unmaintained non-free; do
+  if [ -f "$APORTSDIR"/$repo/"$1"/APKBUILD ]; then
+    (
+      cd "$APORTSDIR"/$repo/"$1"
+      "$FILEMANAGER"
+    )
+    exit $?
+  fi
+done
+${printerr-src}/bin/printerr no aport named "$1"
+'';
 ac-src = pkgs.writeShellApplication {
   name = "ac";
   runtimeInputs = [ pkgs.apk-tools pkgs.abuild ];
@@ -163,5 +190,6 @@ in
       ac-src
       ab-src
       au-src
+      an-src
     ];
   }
