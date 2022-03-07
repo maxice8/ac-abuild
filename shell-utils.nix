@@ -70,6 +70,9 @@ au-src = pkgs.writeShellApplication {
         cd "$APORTSDIR"/$repo/"$1"
         "$AX_UNPACK" unpack
         # shellcheck disable=1090
+        # We are sourcing so lets not fail if a variable
+        # is unset for us
+        set +u
         . "$APORTSDIR"/"$repo"/"$1"/APKBUILD
         workdir="$APORTSDIR"/$repo/"$1"/src
         if [ -n "''${builddir+x}" ]; then
