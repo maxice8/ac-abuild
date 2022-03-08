@@ -45,6 +45,32 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
+  ae-fish-comp = pkgs.writeTextFile {
+    name = "ae.fish";
+    destination = "/share/fish/vendor_completions.d/ae.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained non-free
+
+      # Global commands
+      complete -f -c ae -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
   au-src = pkgs.writeShellApplication {
     name = "au";
     runtimeInputs = [ pkgs.apk-tools pkgs.abuild ];
@@ -187,6 +213,7 @@ pkgs.symlinkJoin {
   name = "scripts";
   paths = [
     ae-src
+    ae-fish-comp
     ac-src
     ab-src
     au-src
