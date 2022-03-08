@@ -50,7 +50,7 @@ let
     destination = "/share/fish/vendor_completions.d/ae.fish";
     text = ''
       # Repositories
-      set -l repositories main community testing unmaintained non-free
+      set -l repositories main community testing unmaintained
 
       # Global commands
       complete -f -c ae -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
@@ -115,6 +115,32 @@ let
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
   };
+  au-fish-comp = pkgs.writeTextFile {
+    name = "au.fish";
+    destination = "/share/fish/vendor_completions.d/au.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained
+
+      # Global commands
+      complete -f -c au -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
   ab-src = pkgs.writeShellScriptBin "ab"
     ''
       : "''${APORTSDIR:=$PWD}"
@@ -152,6 +178,32 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
+  ab-fish-comp = pkgs.writeTextFile {
+    name = "ab.fish";
+    destination = "/share/fish/vendor_completions.d/ab.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained
+
+      # Global commands
+      complete -f -c ab -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
   an-src = pkgs.writeShellScriptBin "an"
     ''
       : "''${APORTSDIR:=$PWD}"
@@ -179,6 +231,32 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
+  an-fish-comp = pkgs.writeTextFile {
+    name = "an";
+    destination = "/share/fish/vendor_completions.d/an.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained
+
+      # Global commands
+      complete -f -c an -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
   ac-src = pkgs.writeShellApplication {
     name = "ac";
     runtimeInputs = [ pkgs.apk-tools pkgs.abuild ];
@@ -208,6 +286,32 @@ let
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
   };
+  ac-fish-comp = pkgs.writeTextFile {
+    name = "ac.fish";
+    destination = "/share/fish/vendor_completions.d/ac.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained
+
+      # Global commands
+      complete -f -c ac -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
 in
 pkgs.symlinkJoin {
   name = "scripts";
@@ -215,8 +319,12 @@ pkgs.symlinkJoin {
     ae-src
     ae-fish-comp
     ac-src
+    ac-fish-comp
     ab-src
+    ab-fish-comp
     au-src
+    au-fish-comp
     an-src
+    an-fish-comp
   ];
 }
