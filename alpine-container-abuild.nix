@@ -1,4 +1,4 @@
-{ pkgs, alpine-image }:
+{ pkgs, image }:
 pkgs.writeShellScriptBin "alpine-container-abuild"
   ''
     set -e
@@ -6,7 +6,7 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
 
     : "''${DABUILD_ARCH:=$(${pkgs.coreutils}/bin/uname -m)}"
     : "''${DABUILD_PACKAGES:=''${PWD%/aports/*}/packages}}"
-    : "''${IMAGE_HASH:=$(basename ${alpine-image} | cut -d - -f 1)}"
+    : "''${IMAGE_HASH:=$(basename ${image} | cut -d - -f 1)}"
     : "''${APORTSDIR:="$PWD"}"
     : "''${UID:="$(${pkgs.coreutils}/bin/id -u)"}"
     : "''${GID:="$(${pkgs.coreutils}/bin/id -g)"}"
