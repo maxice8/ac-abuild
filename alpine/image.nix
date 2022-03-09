@@ -1,4 +1,4 @@
-{ pkgs, lib, uid }:
+{ pkgs, lib }:
 let
   alpine-base = pkgs.dockerTools.pullImage {
     imageName = "docker.io/maxice8/alpine-container-abuild";
@@ -13,13 +13,6 @@ pkgs.dockerTools.buildImage {
   fromImage = alpine-base;
   fromImageName = "alpine-container-abuild";
   fromImageTag = "edge-x86_64";
-
-  runAsRoot =
-    if (uid != 1000) then
-      ''
-        #!/bin/sh
-        sed -e 's|^builder:x:1000:100|builer:x:${uid}:100|g' -i /etc/passwd
-      '' else '''';
 
   config = {
     Entrypoint = [ "/home/builder/entrypoint.sh" ];
