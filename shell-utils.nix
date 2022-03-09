@@ -38,7 +38,7 @@ let
         set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
       fi
 
-      for repo in main community testing unmaintained non-free; do
+      for repo in main community testing unmaintained; do
         if [ -f $repo/"$1"/APKBUILD ]; then
           $EDITOR $repo/"$1"/APKBUILD; exit $?
         fi
@@ -90,7 +90,7 @@ let
         set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
       fi
   
-      for repo in main community testing unmaintained non-free; do
+      for repo in main community testing unmaintained; do
         if [ -f "$APORTSDIR"/$repo/"$1"/APKBUILD ]; then
           (
             cd "$APORTSDIR"/$repo/"$1"
@@ -158,7 +158,7 @@ let
         set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
       fi
 
-      for repo in main community testing unmaintained non-free; do
+      for repo in main community testing unmaintained; do
         if [ -f $repo/"$1"/APKBUILD ]; then
         (
           cd "$APORTSDIR"/$repo/"$1"
@@ -220,7 +220,7 @@ let
         set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
       fi
 
-      for repo in main community testing unmaintained non-free; do
+      for repo in main community testing unmaintained; do
         if [ -f "$APORTSDIR"/$repo/"$1"/APKBUILD ]; then
           (
             cd "$APORTSDIR"/$repo/"$1"
@@ -274,7 +274,7 @@ let
         set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
       fi
 
-      for repo in main community testing unmaintained non-free; do
+      for repo in main community testing unmaintained; do
         if [ -f $repo/"$1"/APKBUILD ]; then
           (
             cd $repo/"$1"
