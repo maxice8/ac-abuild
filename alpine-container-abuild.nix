@@ -8,6 +8,8 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
     : "''${DABUILD_PACKAGES:=''${PWD%/aports/*}/packages}}"
     : "''${IMAGE_HASH:=$(basename ${alpine-image} | cut -d - -f 1)}"
     : "''${APORTSDIR:="$PWD"}"
+    : "''${UID:="$(${pkgs.coreutils}/bin/id -u)"}"
+    : "''${GID:="$(${pkgs.coreutils}/bin/id -g)"}"
 
     APORTSDIRNAME="$(${pkgs.coreutils}/bin/basename "$APORTSDIR")"
 
@@ -49,12 +51,17 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
     # Docker images -q will print the ID of the image if it exists
     # otherwise it will print 
     if [ "$(${pkgs.podman}/bin/podman images -q alpine-container-abuild:"$IMAGE_HASH" 2>/dev/null)" = "" ]; then
-      ${pkgs.podman}/bin/podman load -i ${alpine-image}
+      ${pkgs.podman}/bin/podman load -i ${image}
     fi
 
     ${pkgs.podman}/bin/podman run --tty --interactive \
       $ABUILD_VOLUMES \
-      --userns=keep-id \
+      --uidmap=0:1:"$UID" \
+      --uidmap="$UID":0:1 \
+      --uidmap="$((UID + 1))":"$((UID + 1))":65436 \
+      --gidmap=0:1:"$GID" \
+      --gidmap="$GID":0:1 \
+      --gidmap="$((GID + 1))":"$((GID + 1))":65436 \
       --rm \
       --workdir /home/builder/aports/"''${PWD#*/$APORTSDIRNAME/}" \
       alpine-container-abuild:"$IMAGE_HASH" "$@"
