@@ -1,4 +1,4 @@
-{ pkgs, alpine-container-abuild }:
+{ pkgs }:
 let
   printerr-src = pkgs.writeShellScriptBin "printerr"
     ''
@@ -145,7 +145,7 @@ let
     ''
       : "''${APORTSDIR:=$PWD}"
       : "''${EDITOR:=${pkgs.neovim}/bin/nvim}"
-      : "''${AX_ABUILD:=${alpine-container-abuild}/bin/alpine-container-abuild}"
+      : "''${AX_ABUILD:=${pkgs.alpine-container-abuild}/bin/alpine-container-abuild}"
 
       # switch to APORTSDIR
       cd "$APORTSDIR"
