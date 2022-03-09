@@ -58,10 +58,10 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
       $ABUILD_VOLUMES \
       --uidmap=0:1:"$UID" \
       --uidmap="$UID":0:1 \
-      --uidmap="$((UID + 1))":"$((UID + 1))":65436 \
+      --uidmap="$((UID + 1))":"$((UID + 1))":64536 \
       --gidmap=0:1:"$GID" \
       --gidmap="$GID":0:1 \
-      --gidmap="$((GID + 1))":"$((GID + 1))":65436 \
+      --gidmap="$((GID + 1))":"$((GID + 1))":64536 \
       --rm \
       --workdir /home/builder/aports/"''${PWD#*/$APORTSDIRNAME/}" \
       alpine-container-abuild:"$IMAGE_HASH" "$@"
