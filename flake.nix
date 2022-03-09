@@ -40,6 +40,9 @@
             inherit (self.packages.${system})
               alpine-container-abuild
               ac-abuild-shell-utils;
+            abuild = import ./vendor/abuild.nix {
+              inherit final prev;
+            };
           };
         }
       );
