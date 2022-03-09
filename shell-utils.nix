@@ -312,6 +312,37 @@ let
       end
     '';
   };
+  al-src = pkgs.writeShellScriptBin "al"
+    ''
+      : "''${APORTSDIR:=$PWD}"
+      : "''${APKBUILD_LINT:=${pkgs.atools}/bin/apkbuild-lint}"
+      : "''${APORTS_LINT:=${pkgs.atools}/bin/aports-lint}"
+      : "''${SECFIXES_CHECK:=${pkgs.atools}/bin/secfixes-check}"
+
+      # switch to APORTSDIR
+      cd "$APORTSDIR"
+
+      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+
+      prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
+
+      if [ -n "$prefix" ]; then
+        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+      fi
+
+      for repo in main community testing unmaintained; do
+        if [ -f "$APORTSDIR"/$repo/"$1"/APKBUILD ]; then
+          (
+            cd "$APORTSDIR"/$repo/"$1"
+            "$APKBUILD_LINT" ./APKBUILD
+            "$APORTS_LINT" ./APKBUILD
+            "$SECFIXES_CHECK" ./APKBUILD
+          )
+          exit $?
+        fi
+      done
+      ${printerr-src}/bin/printerr no aport named "$1"
+    '';
 in
 pkgs.symlinkJoin {
   name = "scripts";
@@ -326,5 +357,6 @@ pkgs.symlinkJoin {
     au-fish-comp
     an-src
     an-fish-comp
+    al-src
   ];
 }
