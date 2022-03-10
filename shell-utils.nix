@@ -343,6 +343,32 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
+  al-fish-comp = pkgs.writeTextFile {
+    name = "al.fish";
+    destination = "/share/fish/vendor_completions.d/al.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained
+    
+      # Global commands
+      complete -f -c al -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+    
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+    
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
 in
 pkgs.symlinkJoin {
   name = "scripts";
@@ -358,5 +384,6 @@ pkgs.symlinkJoin {
     an-src
     an-fish-comp
     al-src
+    al-fish-comp
   ];
 }
