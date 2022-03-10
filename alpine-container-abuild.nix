@@ -10,6 +10,7 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
     : "''${APORTSDIR:="$PWD"}"
     : "''${UID:="$(${pkgs.coreutils}/bin/id -u)"}"
     : "''${GID:="$(${pkgs.coreutils}/bin/id -g)"}"
+    : "''${AC_ABUILD_ARGS:=}"
 
     APORTSDIRNAME="$(${pkgs.coreutils}/bin/basename "$APORTSDIR")"
 
@@ -56,6 +57,7 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
 
     ${pkgs.podman}/bin/podman run --tty --interactive \
       $ABUILD_VOLUMES \
+      $AC_ABUILD_ARGS \
       --uidmap=0:1:"$UID" \
       --uidmap="$UID":0:1 \
       --uidmap="$((UID + 1))":"$((UID + 1))":64536 \
