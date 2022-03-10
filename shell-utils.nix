@@ -369,6 +369,61 @@ let
       end
     '';
   };
+  ad-src = pkgs.writeShellScriptBin "ad"
+    ''
+      : "''${APORTSDIR:=$PWD}"
+
+      # switch to APORTSDIR
+      cd "$APORTSDIR"
+
+      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+
+      prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
+
+      if [ -n "$prefix" ]; then
+        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+      fi
+
+      for repo in main community testing unmaintained; do
+        if [ -f "$APORTSDIR"/$repo/"$1"/APKBUILD ]; then
+          cd "$APORTSDIR"/"$repo"/"$1"
+          # Run podman with a different entrypoint
+          output="$(AC_ABUILD_ARGS="--entrypoint=/home/builder/apkg-diff" \
+          ${pkgs.alpine-container-abuild}/bin/alpine-container-abuild \
+          size depends provides files)"
+            printf '%s\n' "$output" | ${pkgs.less}/bin/less -r --quit-if-one-screen
+          exit $?
+        fi
+      done
+      ${printerr-src}/bin/printerr no aport named "$1"
+    '';
+
+  ad-fish-comp = pkgs.writeTextFile {
+    name = "ad.fish";
+    destination = "/share/fish/vendor_completions.d/ad.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained
+
+      # Global commands
+      complete -f -c ad -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
 in
 pkgs.symlinkJoin {
   name = "scripts";
@@ -385,5 +440,7 @@ pkgs.symlinkJoin {
     an-fish-comp
     al-src
     al-fish-comp
+    ad-src
+    ad-fish-comp
   ];
 }
