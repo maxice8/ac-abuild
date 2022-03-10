@@ -35,6 +35,10 @@
               image = pkgs.callPackage ./alpine/image.nix { };
             };
             ac-abuild-shell-utils = pkgs.callPackage ./shell-utils.nix { };
+            # don't exposite this on the overlay, it is meant for usage by
+            # other scripts, it would be include in shell-utils.nix but it
+            # is just too big by itself
+            human-size = pkgs.callPackage ./pkgs/human-size.nix { };
           };
           overlays = final: prev: {
             inherit (self.packages.${system})
