@@ -23,6 +23,7 @@ RUN adduser -D builder -G users \
 USER builder
 WORKDIR /home/builder
 COPY entrypoint.sh /home/builder
+COPY apkg-diff /home/builder
 RUN mkdir packages
 
 ENTRYPOINT ["/home/builder/entrypoint.sh"]

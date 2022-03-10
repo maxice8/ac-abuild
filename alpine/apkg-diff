@@ -1,0 +1,195 @@
+#!/bin/sh
+#
+# Show diff of the contents of a package (files) or the
+# changes in providers and dependencies.
+#
+# Must be called from where the APKBUILD is located
+#
+
+NORMAL="\033[1;0m"
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+
+ok() {
+	printf "$GREEN>>>$NORMAL %s\n" "$1"
+}
+
+die() {
+	printf "$RED>>>ERROR:$NORMAL %s\n" "$1"
+	exit 1
+}
+
+human_size() {
+	awk 'function human(x) {
+         s=" B   KiB MiB GiB TiB EiB PiB YiB ZiB"
+         while (x>=1024 && length(s)>1) 
+               {x/=1024; s=substr(s,5)}
+         s=substr(s,1,4)
+         xf=(s==" B  ")?"%5d   ":"%8.2f"
+         return sprintf( xf"%s\n", x, s)
+      }
+      {gsub(/^[0-9]+/, human($1)); print}' | xargs
+}
+
+# Escape sequence from printf, we need it because x1B is only understood
+# by GNU sed and we use busybox sed
+esc="$(printf -- '\033')"
+colordiff() {
+	sed \
+        -e '/^+++/d' \
+        -e '/^---/d' \
+        -e '/^[^-+]/d' \
+        -e "s/^-/${esc}[31m-/" \
+        -e "s/^+/${esc}[32m+/" \
+        -e "s/$/${esc}[0m/"
+}
+
+# shellcheck disable=SC1091
+. ./APKBUILD || die "failed to source repo for package"
+
+tmpdir=$(mktemp -d -t checkpkg-script.XXXXXX)
+# shellcheck disable=2064
+trap "rm -rf '$tmpdir'" INT EXIT
+cd "$tmpdir" || die "failed to create temp dir"
+
+# generate a temp repositories file with only the http(s) repos
+grep -E "^https?:" /etc/apk/repositories >"$tmpdir"/remote-repositories
+grep -E -v "^https?:" /etc/apk/repositories >"$tmpdir"/local-repositories
+
+_carch="$(/usr/bin/abuild -A)"
+
+# Create a package list that holds the name of the package
+# and the name of every subpackage
+# shellcheck disable=SC2154
+pkglist="$pkgname"
+# shellcheck disable=SC2154
+for pkg in $subpackages; do
+	pkglist="$pkglist ${pkg%%:*}"
+done
+
+# shellcheck disable=SC2086
+oldpkgs="$(apk fetch \
+	--repositories-file "$tmpdir"/remote-repositories \
+	--simulate \
+	$pkglist 2>/dev/null |
+	grep Downloading | sed 's/^Downloading //')"
+
+# shellcheck disable=SC2154
+if [ "$(echo "$oldpkgs" | grep -o "^$pkgname-[0-9].*")" = "$pkgname-$pkgver-r$pkgrel" ]; then
+	# shellcheck disable=SC2154
+	die "$pkgname-$pkgver-r$pkgrel is the same as upstream"
+fi
+
+# Fetch all the APKs before doing the operations
+for i in $pkglist; do
+
+	(
+		# shellcheck disable=SC2154
+		pkg="$i-$pkgver-r$pkgrel"
+		pkgfile=${pkg}.apk
+
+		# We need to declare this here so the changes inside the loop change it
+		oldapkpath='' newapkpath=''
+
+		oldpkg="$(echo "$oldpkgs" | grep -o "^$i-[0-9].*")"
+
+		# shellcheck disable=SC2013
+		for repo in $(cat "$tmpdir"/local-repositories); do
+			if [ -f "$repo"/"$_carch"/"$pkgfile" ]; then
+				newapkpath="$repo"/"$_carch"/"$pkgfile"
+				continue
+			fi
+		done
+		[ -f "$newapkpath" ] || die "can't find $pkgfile, maybe package wasn't built"
+
+		if [ -n "$oldpkg" ]; then
+			for candidate in /var/cache/apk/"$oldpkg".*.apk; do
+				if ! [ -f "$candidate" ]; then
+					continue
+				fi
+				oldapkpath="$candidate"
+			done
+
+			if ! [ -f "$oldapkpath" ]; then
+				# Fetch the package for all runs
+				apk fetch \
+					--repositories-file "$tmpdir"/remote-repositories \
+					--output "$tmpdir" \
+					"$i" \
+					>/dev/null 2>&1 &&
+				oldapkpath="$PWD"/"$oldpkg".apk
+			fi
+		fi
+
+		echo "$oldapkpath" >"$tmpdir"/old-"$i"
+		echo "$newapkpath" >"$tmpdir"/new-"$i"
+	) &
+done
+wait
+
+for i in $pkglist; do
+	if ! [ -f "$tmpdir"/new-"$i" ]; then
+		continue
+	fi
+
+	# shellcheck disable=SC2013
+	oldapk="$(cat "$tmpdir"/old-"$i")"
+	# shellcheck disable=SC2013
+	newapk="$(cat "$tmpdir"/new-"$i")"
+
+	[ -e "$oldapk" ] || oldapk=""
+	[ -f "$newapk" ] || continue
+
+	for attr in "$@"; do
+		case "$attr" in
+		files)
+			[ -z "$oldapk" ] ||
+				tar -z --list --file="$oldapk" 2>/dev/null |
+				grep -E -v '(^\.SIGN\.|^\.PKGINFO)' |
+					sort >"$tmpdir"/difflist-"$i"-old-"$attr"
+
+			tar -z --list --file="$newapk" |
+				grep -E -v '(^\.SIGN\.|^\.PKGINFO)' |
+				sort >"$tmpdir"/difflist-"$i"-new-"$attr"
+			;;
+		*)
+			[ -z "$oldapk" ] ||
+				tar -z --extract --to-stdout --file="$oldapk" '.PKGINFO' 2>/dev/null |
+				grep "^$attr =" |
+					sed "s/^$attr = //" |
+					sort >"$tmpdir"/difflist-"$i"-old-"$attr"
+
+			tar -z --extract --to-stdout --file="$newapk" '.PKGINFO' |
+				grep "^$attr = " |
+				sed "s/^$attr = //" |
+				sort >"$tmpdir"/difflist-"$i"-new-"$attr"
+
+			# When the user asks for size, we want to give them a human-readable size
+			if [ "$attr" = size ]; then
+				if [ -n "$oldapk" ]; then
+					filesize="$(cat "$tmpdir"/difflist-"$i"-old-"$attr")"
+                    #filesize="$((filesize - 8192))"
+					echo "$filesize" | human_size >"$tmpdir"/difflist-"$i"-old-"$attr"
+				fi
+				if [ -s "$tmpdir"/difflist-"$i"-new-"$attr" ]; then
+          filesize="$(cat "$tmpdir"/difflist-"$i"-new-"$attr")"
+          echo "$filesize" | human_size >"$tmpdir"/difflist-"$i"-new-"$attr"
+				fi
+			fi
+
+			;;
+		esac
+		if ! [ -f "$tmpdir"/difflist-"$i"-old-"$attr" ]; then
+			touch "$tmpdir"/difflist-"$i"-old-"$attr"
+		fi
+		pkg="${newapk%.apk}"
+		pkg="${pkg##*/}"
+		oldpkg="${oldapk%.apk}"
+		oldpkg="${oldpkg##*/}"
+		ok "pkg=$pkg$(test -n "$oldapk" && echo " oldpkg=$oldpkg") prop=$attr:"
+		diff \
+			"$tmpdir"/difflist-"$i"-old-"$attr" \
+			"$tmpdir"/difflist-"$i"-new-"$attr" \
+			| colordiff
+	done
+done 
