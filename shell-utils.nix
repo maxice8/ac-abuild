@@ -424,6 +424,79 @@ let
       end
     '';
   };
+  aw-src = pkgs.writeShellApplication {
+    name = "aw";
+    runtimeInputs = [ pkgs.apk-tools pkgs.abuild ];
+    text = ''
+      : "''${AX_UNPACK:=${pkgs.abuild}/bin/abuild}"
+      : "''${APORTSDIR:=$PWD}"
+  
+      # switch to APORTSDIR
+      cd "$APORTSDIR"
+  
+      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+  
+      prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
+  
+      if [ -n "$prefix" ]; then
+        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+      fi
+  
+      for repo in main community testing unmaintained; do
+        if [ -f "$APORTSDIR"/$repo/"$1"/APKBUILD ]; then
+          (
+            cd "$APORTSDIR"/$repo/"$1"
+            "$AX_UNPACK" unpack
+            # We are sourcing so lets not fail if a variable
+            # is unset for us
+            set +u
+            # shellcheck disable=1090
+            . "$APORTSDIR"/"$repo"/"$1"/APKBUILD
+            workdir="$APORTSDIR"/$repo/"$1"/src
+            if [ -n "''${builddir+x}" ]; then
+              workdir="$workdir/$builddir"
+            else
+              # shellcheck disable=SC2154
+              workdir="$workdir/$pkgname-$pkgver"
+            fi
+            cd "$workdir"
+            git init >/dev/null
+            git add .
+            git commit -m "start"
+            $SHELL
+          )
+          exit $?
+        fi
+      done
+      ${printerr-src}/bin/printerr no aport named "$1"
+    '';
+  };
+  aw-fish-comp = pkgs.writeTextFile {
+    name = "aw.fish";
+    destination = "/share/fish/vendor_completions.d/aw.fish";
+    text = ''
+      # Repositories
+      set -l repositories main community testing unmaintained
+
+      # Global commands
+      complete -f -c aw -n "__fish_al_strict" -a "(__fish_atools_get_aports $repositories)"
+
+      # grab all packages
+      function __fish_atools_get_aports
+        for repo in $argv
+          ls $APORTSDIR/$repo | string replace -r '$' "\t$repo"
+        end
+      end
+
+      # al is very strict with subcommands, there are no repetions
+      function __fish_al_strict
+        set -l cmd (commandline -poc)
+        [ (count $cmd) -gt 1 ] && return 1
+        [ (count $cmd) -lt 1 ] && return 1
+        return 0
+      end
+    '';
+  };
 in
 pkgs.symlinkJoin {
   name = "scripts";
@@ -442,5 +515,7 @@ pkgs.symlinkJoin {
     al-fish-comp
     ad-src
     ad-fish-comp
+    aw-src
+    aw-fish-comp
   ];
 }
