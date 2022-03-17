@@ -1,0 +1,4 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p nix-prefetch-docker wl-clipboard coreutils-full
+nix-prefetch-docker --quiet docker.io/maxice8/alpine-container-abuild edge-$(uname -m) \
+	| tee /dev/tty | wl-copy
