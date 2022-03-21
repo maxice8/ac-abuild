@@ -497,6 +497,16 @@ let
       end
     '';
   };
+  as-src = pkgs.writeShellScriptBin "as"
+    ''
+      : "''${APORTSDIR:=$PWD}"
+      : "''${AC_ABUILD:=${pkgs.alpine-container-abuild}/bin/alpine-container-abuild}"
+
+      # switch to APORTSDIR
+      cd "$APORTSDIR"
+
+      "$AC_ABUILD" shell "$@"
+    '';
 in
 pkgs.symlinkJoin {
   name = "scripts";
@@ -517,5 +527,6 @@ pkgs.symlinkJoin {
     ad-fish-comp
     aw-src
     aw-fish-comp
+    as-src
   ];
 }
