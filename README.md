@@ -72,5 +72,4 @@ Relevant snippets from the script:
 
 ## Todo
 
-1. Make it accept `pkgs` from another place instead of itself doing `import nixpkgs` and setting the necessary overlays, this should allow us to take input from other overlays.
-2. Make it so the images we upload are tagged with an unique input like date, this way we do not have the possibility of using a different image by referring to the generic x86\_64 tag `edge-x86_64`, it would instead be something like `x86_64-$(date -Idate)`.
+1. add a specific subcommand called `shell` that ignores all checks and just runs the podman container with `--entrypoint=/bin/sh`
