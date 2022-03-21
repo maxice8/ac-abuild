@@ -5,7 +5,7 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
     set -u
 
     : "''${DABUILD_ARCH:=$(${pkgs.coreutils}/bin/uname -m)}"
-    : "''${DABUILD_PACKAGES:=''${PWD%/aports/*}/packages}}"
+    : "''${DABUILD_PACKAGES:=''${PWD%/aports*}/packages}}"
     : "''${IMAGE_HASH:=$(basename ${image} | cut -d - -f 1)}"
     : "''${APORTSDIR:="$PWD"}"
     : "''${UID:="$(${pkgs.coreutils}/bin/id -u)"}"
@@ -19,15 +19,24 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
       exit 1
     }
 
+    ## Check if our first running command is shell, which is special
+    shell=false
+    [ "''${1:-}" = "shell" ] && {
+      shift ; 
+      shell=true ;
+      AC_ABUILD_ARGS="--entrypoint=/bin/sh" ;
+    }
+
     ## check running from within an `aports` tree
-    if [ "''${PWD%*/$APORTSDIRNAME/*}" = "$PWD" ]; then
+    if [ "''${PWD%*/$APORTSDIRNAME/*}" = "$PWD" ] && [ "$shell" = "false" ]; then
       die "Error: expecting to be run from within an aports tree!" \
         "Could not find '/aports/' in the current path: $APORTSDIR"
     fi
 
+
     DABUILD_PACKAGES="$DABUILD_PACKAGES/edge"
 
-    ABUILD_VOLUMES="-v ''${PWD%/$APORTSDIRNAME/*}/aports:/home/builder/aports:Z \
+    ABUILD_VOLUMES="-v ''${PWD%/$APORTSDIRNAME*}/aports:/home/builder/aports:Z \
       -v $DABUILD_PACKAGES:/home/builder/packages:Z"
 
     if [ -f "$HOME/.gitconfig" ]; then
@@ -65,6 +74,6 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
       --gidmap="$GID":0:1 \
       --gidmap="$((GID + 1))":"$((GID + 1))":64536 \
       --rm \
-      --workdir /home/builder/aports/"''${PWD#*/$APORTSDIRNAME/}" \
+      --workdir /home/builder/aports"''${PWD#*/$APORTSDIRNAME}" \
       alpine-container-abuild:"$IMAGE_HASH" "$@"
   ''
