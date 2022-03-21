@@ -72,4 +72,4 @@ Relevant snippets from the script:
 
 ## Todo
 
-1. add a specific subcommand called `shell` that ignores all checks and just runs the podman container with `--entrypoint=/bin/sh`
+So good so far.
