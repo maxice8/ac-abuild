@@ -1,5 +1,41 @@
 {
   "nodes": {
+    "abuild-src": {
+      "flake": false,
+      "locked": {
+        "host": "gitlab.alpinelinux.org",
+        "lastModified": 1642432645,
+        "narHash": "sha256-5ATw/fePt0nvr3iiWLwRFR+K4E2dUVfwCWmPeUoDAPQ=",
+        "owner": "alpine",
+        "repo": "abuild",
+        "rev": "681ef9dfcf6e57bdda767efed7e50ce8e9de0563",
+        "type": "gitlab"
+      },
+      "original": {
+        "host": "gitlab.alpinelinux.org",
+        "owner": "alpine",
+        "repo": "abuild",
+        "type": "gitlab"
+      }
+    },
+    "apkbuild-vim": {
+      "flake": false,
+      "locked": {
+        "host": "gitlab.alpinelinux.org",
+        "lastModified": 1631356169,
+        "narHash": "sha256-9k1iokjWnD5VJhhbKjo64B52Bg+HZ0K96iVnmTpKDYA=",
+        "owner": "Leo",
+        "repo": "apkbuild.vim",
+        "rev": "8dbd9745f76fb284656711238e8cd42d021da85e",
+        "type": "gitlab"
+      },
+      "original": {
+        "host": "gitlab.alpinelinux.org",
+        "owner": "Leo",
+        "repo": "apkbuild.vim",
+        "type": "gitlab"
+      }
+    },
     "atools": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -53,13 +89,74 @@
         "type": "github"
       }
     },
+    "kanagawa-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1647887800,
+        "narHash": "sha256-55EtPfSH4g0ZviwThG9HPIyXqipTvPmvgb3d/VgFlcA=",
+        "owner": "rebelot",
+        "repo": "kanagawa.nvim",
+        "rev": "f5881a688b951cb35a7f36628b23ee4393d96daf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rebelot",
+        "repo": "kanagawa.nvim",
+        "type": "github"
+      }
+    },
+    "lc0-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1647810599,
+        "narHash": "sha256-qiwyCx5p1ZhEE61urw42W7OH/CdndyieTuOWHN5Si0A=",
+        "ref": "master",
+        "rev": "70b36c7a22e558124bae35b2f60e79039a91e1bf",
+        "revCount": 1357,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/LeelaChessZero/lc0.git"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/LeelaChessZero/lc0.git"
+      }
+    },
+    "maxice8-nix": {
+      "inputs": {
+        "abuild-src": "abuild-src",
+        "apkbuild-vim": "apkbuild-vim",
+        "flake-utils": "flake-utils_2",
+        "kanagawa-nvim": "kanagawa-nvim",
+        "lc0-src": "lc0-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "vim-scdoc": "vim-scdoc",
+        "ydotool-src": "ydotool-src"
+      },
+      "locked": {
+        "lastModified": 1648213802,
+        "narHash": "sha256-0kstWXWnz0/c+KPqI8J1EP7k2CYQp5o5MY5m70djdOs=",
+        "owner": "maxice8",
+        "repo": "nix-overlay",
+        "rev": "49f1cb5c863284f456b04671ab2154b24852a2de",
+        "type": "github"
+      },
+      "original": {
+        "owner": "maxice8",
+        "repo": "nix-overlay",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1647893727,
-        "narHash": "sha256-pOi7VdCb+s5Cwh5CS7YEZVRgH9uCmE87J5W7iXv29Ck=",
+        "lastModified": 1648069223,
+        "narHash": "sha256-BXzQV8p/RR440EB9qY0ULYfTH0zSW1stjUCYeP4SF+E=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "1ec61dd4167f04be8d05c45780818826132eea0d",
+        "rev": "1d08ea2bd83abef174fb43cbfb8a856b8ef2ce26",
         "type": "github"
       },
       "original": {
@@ -72,8 +169,40 @@
     "root": {
       "inputs": {
         "atools": "atools",
-        "flake-utils": "flake-utils_2",
+        "maxice8-nix": "maxice8-nix",
         "nixpkgs": "nixpkgs"
+      }
+    },
+    "vim-scdoc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1628096593,
+        "narHash": "sha256-D3ka3NBts/x+IH/C6qNSBaO4zBmM0aJHL0yMDJKMyDM=",
+        "owner": "gpanders",
+        "repo": "vim-scdoc",
+        "rev": "a275d125c7905a803a9a90cfc5501fcebeb210c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gpanders",
+        "repo": "vim-scdoc",
+        "type": "github"
+      }
+    },
+    "ydotool-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645004329,
+        "narHash": "sha256-maXXGCqB8dkGO8956hsKSwM4HQdYn6z1jBFENQ9sKcA=",
+        "owner": "ReimuNotMoe",
+        "repo": "ydotool",
+        "rev": "81195bfde8f9b5218e6e87bbd6f6e362a7653aad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ReimuNotMoe",
+        "repo": "ydotool",
+        "type": "github"
       }
     }
   },
