@@ -14,8 +14,20 @@
     let
       supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      nixpkgsFor = forAllSystems (system:
+        import nixpkgs {
+          inherit system;
+          overlays = [
+            self.overlays.default
+            # provides atools
+            self.inputs.atools.overlays.default
+            # provides abuild-master instead of the one
+            # from nixos/nixpkgs
+            self.inputs.maxice8-nix.overlays.default
+          ];
+        });
     in
-    {
+    rec {
       overlays.default = final: prev: {
         alpine-container-abuild = final.callPackage ./alpine-container-abuild.nix {
           image = final.callPackage ./alpine/image.nix { };
@@ -23,20 +35,11 @@
         ac-abuild-shell-utils = final.callPackage ./shell-utils.nix { };
       };
 
-      checks = forAllSystems (system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [
-              self.overlays.default
-              self.inputs.atools.overlays.default
-            ];
-          };
-        in
-        {
-          build-image = pkgs.callPackage ./alpine/image.nix { };
-          build-alpine-container-abuild = pkgs.alpine-container-abuild;
-          build-shell-utils = pkgs.ac-abuild-shell-utils;
-        });
+      packages = forAllSystems (system: {
+        inherit (nixpkgsFor.${system})
+          alpine-container-abuild
+          ac-abuild-shell-utils;
+        default = packages.${system}.alpine-container-abuild;
+      });
     };
 }
