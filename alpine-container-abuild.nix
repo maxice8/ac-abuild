@@ -1,18 +1,22 @@
-{ pkgs, image }:
-pkgs.writeShellScriptBin "alpine-container-abuild"
+{ image
+, writeShellScriptBin
+, coreutils
+, podman
+}:
+writeShellScriptBin "alpine-container-abuild"
   ''
     set -e
     set -u
 
-    : "''${DABUILD_ARCH:=$(${pkgs.coreutils}/bin/uname -m)}"
+    : "''${DABUILD_ARCH:=$(${coreutils}/bin/uname -m)}"
     : "''${DABUILD_PACKAGES:=''${PWD%/aports*}/packages}}"
     : "''${IMAGE_HASH:=$(basename ${image} | cut -d - -f 1)}"
     : "''${APORTSDIR:="$PWD"}"
-    : "''${UID:="$(${pkgs.coreutils}/bin/id -u)"}"
-    : "''${GID:="$(${pkgs.coreutils}/bin/id -g)"}"
+    : "''${UID:="$(${coreutils}/bin/id -u)"}"
+    : "''${GID:="$(${coreutils}/bin/id -g)"}"
     : "''${AC_ABUILD_ARGS:=}"
 
-    APORTSDIRNAME="$(${pkgs.coreutils}/bin/basename "$APORTSDIR")"
+    APORTSDIRNAME="$(${coreutils}/bin/basename "$APORTSDIR")"
 
     die() {
       printf >&2 "%s\\n" "$@"
@@ -60,11 +64,11 @@ pkgs.writeShellScriptBin "alpine-container-abuild"
     #
     # Docker images -q will print the ID of the image if it exists
     # otherwise it will print 
-    if [ "$(${pkgs.podman}/bin/podman images -q alpine-container-abuild:"$IMAGE_HASH" 2>/dev/null)" = "" ]; then
-      ${pkgs.podman}/bin/podman load -i ${image}
+    if [ "$(${podman}/bin/podman images -q alpine-container-abuild:"$IMAGE_HASH" 2>/dev/null)" = "" ]; then
+      ${podman}/bin/podman load -i ${image}
     fi
 
-    ${pkgs.podman}/bin/podman run --tty --interactive \
+    ${podman}/bin/podman run --tty --interactive \
       $ABUILD_VOLUMES \
       $AC_ABUILD_ARGS \
       --uidmap=0:1:"$UID" \
