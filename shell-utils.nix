@@ -1,15 +1,29 @@
-{ pkgs }:
+{ symlinkJoin
+, writeShellApplication
+, writeShellScriptBin
+, writeTextFile
+, atools
+, abuild
+, git
+, coreutils
+, neovim
+, ranger
+, apk-tools
+, alpine-container-abuild
+, less
+, ...
+}:
 let
-  printerr-src = pkgs.writeShellScriptBin "printerr"
+  printerr-src = writeShellScriptBin "printerr"
     ''
       [ -n ''${PRINTERR_QUIET+x} ] || exit 0
       [ $# -lt 1 ] && exit 1
-      ${pkgs.coreutils}/bin/printf '\033[0m[ \033[31mERR\033[0m ] %s\n' "$*" 1>&2
+      ${coreutils}/bin/printf '\033[0m[ \033[31mERR\033[0m ] %s\n' "$*" 1>&2
     '';
-  alpine-stable-prefix-src = pkgs.writeShellScriptBin "alpine-stable-prefix"
+  alpine-stable-prefix-src = writeShellScriptBin "alpine-stable-prefix"
     ''
-      ${pkgs.git}/bin/git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 1
-      [ $# -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      ${git}/bin/git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 1
+      [ $# -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
 
       for branch in "$@"; do
         case "$branch" in
@@ -22,20 +36,20 @@ let
         esac
       done
     '';
-  ae-src = pkgs.writeShellScriptBin "ae"
+  ae-src = writeShellScriptBin "ae"
     ''
       : "''${APORTSDIR:=$PWD}"
-      : "''${EDITOR:=${pkgs.neovim}/bin/nvim}"
+      : "''${EDITOR:=${neovim}/bin/nvim}"
 
       # switch to APORTSDIR
       cd "$APORTSDIR"
 
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
 
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
 
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
 
       for repo in main community testing unmaintained; do
@@ -45,7 +59,7 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
-  ae-fish-comp = pkgs.writeTextFile {
+  ae-fish-comp = writeTextFile {
     name = "ae.fish";
     destination = "/share/fish/vendor_completions.d/ae.fish";
     text = ''
@@ -71,23 +85,23 @@ let
       end
     '';
   };
-  au-src = pkgs.writeShellApplication {
+  au-src = writeShellApplication {
     name = "au";
-    runtimeInputs = [ pkgs.apk-tools pkgs.abuild ];
+    runtimeInputs = [ apk-tools abuild ];
     text = ''
-      : "''${AX_UNPACK:=${pkgs.abuild}/bin/abuild}"
+      : "''${AX_UNPACK:=${abuild}/bin/abuild}"
       : "''${APORTSDIR:=$PWD}"
-      : "''${FILEMANAGER:=${pkgs.ranger}/bin/ranger}"
+      : "''${FILEMANAGER:=${ranger}/bin/ranger}"
   
       # switch to APORTSDIR
       cd "$APORTSDIR"
   
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
   
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
   
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
   
       for repo in main community testing unmaintained; do
@@ -115,7 +129,7 @@ let
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
   };
-  au-fish-comp = pkgs.writeTextFile {
+  au-fish-comp = writeTextFile {
     name = "au.fish";
     destination = "/share/fish/vendor_completions.d/au.fish";
     text = ''
@@ -141,21 +155,21 @@ let
       end
     '';
   };
-  ab-src = pkgs.writeShellScriptBin "ab"
+  ab-src = writeShellScriptBin "ab"
     ''
       : "''${APORTSDIR:=$PWD}"
-      : "''${EDITOR:=${pkgs.neovim}/bin/nvim}"
-      : "''${AX_ABUILD:=${pkgs.alpine-container-abuild}/bin/alpine-container-abuild}"
+      : "''${EDITOR:=${neovim}/bin/nvim}"
+      : "''${AX_ABUILD:=${alpine-container-abuild}/bin/alpine-container-abuild}"
 
       # switch to APORTSDIR
       cd "$APORTSDIR"
 
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
 
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
 
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
 
       for repo in main community testing unmaintained; do
@@ -178,7 +192,7 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
-  ab-fish-comp = pkgs.writeTextFile {
+  ab-fish-comp = writeTextFile {
     name = "ab.fish";
     destination = "/share/fish/vendor_completions.d/ab.fish";
     text = ''
@@ -204,20 +218,20 @@ let
       end
     '';
   };
-  an-src = pkgs.writeShellScriptBin "an"
+  an-src = writeShellScriptBin "an"
     ''
       : "''${APORTSDIR:=$PWD}"
-      : "''${FILEMANAGER:=${pkgs.ranger}/bin/ranger}"
+      : "''${FILEMANAGER:=${ranger}/bin/ranger}"
 
       # switch to APORTSDIR
       cd "$APORTSDIR"
 
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
 
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
 
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
 
       for repo in main community testing unmaintained; do
@@ -231,7 +245,7 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
-  an-fish-comp = pkgs.writeTextFile {
+  an-fish-comp = writeTextFile {
     name = "an";
     destination = "/share/fish/vendor_completions.d/an.fish";
     text = ''
@@ -257,21 +271,21 @@ let
       end
     '';
   };
-  ac-src = pkgs.writeShellApplication {
+  ac-src = writeShellApplication {
     name = "ac";
-    runtimeInputs = [ pkgs.apk-tools pkgs.abuild ];
+    runtimeInputs = [ apk-tools abuild ];
     text = ''
-      : "''${AX_ASUM:=${pkgs.abuild}/bin/abuild}"
+      : "''${AX_ASUM:=${abuild}/bin/abuild}"
       : "''${APORTSDIR=$PWD}"
 
       cd "$APORTSDIR"
 
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
 
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
 
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
 
       for repo in main community testing unmaintained; do
@@ -286,7 +300,7 @@ let
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
   };
-  ac-fish-comp = pkgs.writeTextFile {
+  ac-fish-comp = writeTextFile {
     name = "ac.fish";
     destination = "/share/fish/vendor_completions.d/ac.fish";
     text = ''
@@ -312,22 +326,22 @@ let
       end
     '';
   };
-  al-src = pkgs.writeShellScriptBin "al"
+  al-src = writeShellScriptBin "al"
     ''
       : "''${APORTSDIR:=$PWD}"
-      : "''${APKBUILD_LINT:=${pkgs.atools}/bin/apkbuild-lint}"
-      : "''${APORTS_LINT:=${pkgs.atools}/bin/aports-lint}"
-      : "''${SECFIXES_CHECK:=${pkgs.atools}/bin/secfixes-check}"
+      : "''${APKBUILD_LINT:=${atools}/bin/apkbuild-lint}"
+      : "''${APORTS_LINT:=${atools}/bin/aports-lint}"
+      : "''${SECFIXES_CHECK:=${atools}/bin/secfixes-check}"
 
       # switch to APORTSDIR
       cd "$APORTSDIR"
 
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
 
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
 
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
 
       for repo in main community testing unmaintained; do
@@ -343,7 +357,7 @@ let
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
-  al-fish-comp = pkgs.writeTextFile {
+  al-fish-comp = writeTextFile {
     name = "al.fish";
     destination = "/share/fish/vendor_completions.d/al.fish";
     text = ''
@@ -369,19 +383,19 @@ let
       end
     '';
   };
-  ad-src = pkgs.writeShellScriptBin "ad"
+  ad-src = writeShellScriptBin "ad"
     ''
       : "''${APORTSDIR:=$PWD}"
 
       # switch to APORTSDIR
       cd "$APORTSDIR"
 
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
 
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
 
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
 
       for repo in main community testing unmaintained; do
@@ -389,16 +403,16 @@ let
           cd "$APORTSDIR"/"$repo"/"$1"
           # Run podman with a different entrypoint
           output="$(AC_ABUILD_ARGS="--entrypoint=/home/builder/apkg-diff" \
-          ${pkgs.alpine-container-abuild}/bin/alpine-container-abuild \
+          ${alpine-container-abuild}/bin/alpine-container-abuild \
           size depends provides files)"
-            printf '%s\n' "$output" | ${pkgs.less}/bin/less -r --quit-if-one-screen
+            printf '%s\n' "$output" | ${less}/bin/less -r --quit-if-one-screen
           exit $?
         fi
       done
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
 
-  ad-fish-comp = pkgs.writeTextFile {
+  ad-fish-comp = writeTextFile {
     name = "ad.fish";
     destination = "/share/fish/vendor_completions.d/ad.fish";
     text = ''
@@ -424,22 +438,22 @@ let
       end
     '';
   };
-  aw-src = pkgs.writeShellApplication {
+  aw-src = writeShellApplication {
     name = "aw";
-    runtimeInputs = [ pkgs.apk-tools pkgs.abuild ];
+    runtimeInputs = [ apk-tools abuild ];
     text = ''
-      : "''${AX_UNPACK:=${pkgs.abuild}/bin/abuild}"
+      : "''${AX_UNPACK:=${abuild}/bin/abuild}"
       : "''${APORTSDIR:=$PWD}"
   
       # switch to APORTSDIR
       cd "$APORTSDIR"
   
-      [ "$#" -lt 1 ] && set -- "$(${pkgs.git}/bin/git branch --show-current)"
+      [ "$#" -lt 1 ] && set -- "$(${git}/bin/git branch --show-current)"
   
       prefix="$(${alpine-stable-prefix-src}/bin/alpine-stable-prefix "$1")"
   
       if [ -n "$prefix" ]; then
-        set -- "$(${pkgs.coreutils}/bin/printf '%s' "$1" | ${pkgs.coreutils}/bin/cut -d - -f2-)"
+        set -- "$(${coreutils}/bin/printf '%s' "$1" | ${coreutils}/bin/cut -d - -f2-)"
       fi
   
       for repo in main community testing unmaintained; do
@@ -471,7 +485,7 @@ let
       ${printerr-src}/bin/printerr no aport named "$1"
     '';
   };
-  aw-fish-comp = pkgs.writeTextFile {
+  aw-fish-comp = writeTextFile {
     name = "aw.fish";
     destination = "/share/fish/vendor_completions.d/aw.fish";
     text = ''
@@ -497,10 +511,10 @@ let
       end
     '';
   };
-  as-src = pkgs.writeShellScriptBin "as"
+  as-src = writeShellScriptBin "as"
     ''
       : "''${APORTSDIR:=$PWD}"
-      : "''${AC_ABUILD:=${pkgs.alpine-container-abuild}/bin/alpine-container-abuild}"
+      : "''${AC_ABUILD:=${alpine-container-abuild}/bin/alpine-container-abuild}"
 
       # switch to APORTSDIR
       cd "$APORTSDIR"
@@ -508,7 +522,7 @@ let
       "$AC_ABUILD" shell "$@"
     '';
 in
-pkgs.symlinkJoin {
+symlinkJoin {
   name = "scripts";
   paths = [
     ae-src
