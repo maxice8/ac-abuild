@@ -45,11 +45,11 @@
       },
       "locked": {
         "host": "gitlab.alpinelinux.org",
-        "lastModified": 1648219986,
-        "narHash": "sha256-AN4ZlrdWGSI8yrYhx0QyfuahD1OSvuJQDWFjTRTZuK8=",
+        "lastModified": 1648271763,
+        "narHash": "sha256-i3FhxaBqiY7HtxI3YS1Dw4CcWC8y1ReyHJAgbcICU8Q=",
         "owner": "Leo",
         "repo": "atools",
-        "rev": "f4df6ae2d5f4016de1ccf1c87e38e0e85f7fbf6e",
+        "rev": "4fd3497e51df7b54790366085e106a3b6c9670e5",
         "type": "gitlab"
       },
       "original": {
