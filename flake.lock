@@ -38,6 +38,7 @@
     },
     "atools": {
       "inputs": {
+        "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "nixpkgs": [
           "nixpkgs"
@@ -45,11 +46,11 @@
       },
       "locked": {
         "host": "gitlab.alpinelinux.org",
-        "lastModified": 1648313052,
-        "narHash": "sha256-DDp6BDbgzpKgCe9dD/ZenMFTy2x67kfgh+oiTkoMrHQ=",
+        "lastModified": 1648316148,
+        "narHash": "sha256-hljx5SJuborecnFeCECKEEIBJ2NrJQ6OXl2f9zXvIT8=",
         "owner": "Leo",
         "repo": "atools",
-        "rev": "c4856bd43d7ee168171ce6787fbd0c2dcba69ec5",
+        "rev": "f05fc9b04b56f07d5741368ac9be793c3bbd90cd",
         "type": "gitlab"
       },
       "original": {
@@ -59,13 +60,29 @@
         "type": "gitlab"
       }
     },
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1648199409,
+        "narHash": "sha256-JwPKdC2PoVBkG6E+eWw3j6BMR6sL3COpYWfif7RVb8Y=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "64a525ee38886ab9028e6f61790de0832aa3ef03",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
-        "lastModified": 1644229661,
-        "narHash": "sha256-1YdnJAsNy69bpcjuoKdOYQX0YxZBiCYZo4Twxerqv7k=",
+        "lastModified": 1648297722,
+        "narHash": "sha256-W+qlPsiZd8F3XkzXOzAoR+mpFqzm3ekQkJNa+PIh1BQ=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "3cecb5b042f7f209c56ffd8371b2711a290ec797",
+        "rev": "0f8662f1319ad6abf89b3380dd2722369fc51ade",
         "type": "github"
       },
       "original": {
@@ -137,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1648213802,
-        "narHash": "sha256-0kstWXWnz0/c+KPqI8J1EP7k2CYQp5o5MY5m70djdOs=",
+        "lastModified": 1648282927,
+        "narHash": "sha256-sznfdtYuUQIxKAwLe+15NKt2JxfM/Ymct84cWHorm0E=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "49f1cb5c863284f456b04671ab2154b24852a2de",
+        "rev": "604efea0cff18248038537e456ac194394dcd155",
         "type": "github"
       },
       "original": {
