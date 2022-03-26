@@ -19,11 +19,10 @@
           inherit system;
           overlays = [
             self.overlays.default
-            # provides atools
-            self.inputs.atools.overlays.default
-            # provides abuild-master instead of the one
-            # from nixos/nixpkgs
-            self.inputs.maxice8-nix.overlays.default
+            (final: prev: {
+              inherit (self.inputs.atools.packages.${system}) atools;
+              inherit (self.inputs.maxice8-nix.packages.${system}) abuild;
+            })
           ];
         });
     in
