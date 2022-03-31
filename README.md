@@ -72,4 +72,4 @@ Relevant snippets from the script:
 
 ## Todo
 
-So good so far.
+Automate updating and pushing the image.
