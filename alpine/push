@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p podman coreutils-full
 set -e
 set -u
 
@@ -7,8 +8,11 @@ die() {
 	exit 1
 }
 
-printf '%s' "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" \
+: "${DOCKER_USERNAME:=maxice8}"
+: "${DOCKER_PASSWORD?'please set the DOCKER_PASSWORD variable to your password'}"
+
+printf '%s' "$DOCKER_PASSWORD" | podman login -u "$DOCKER_USERNAME" \
 	--password-stdin || die "Failed to login to docker hub"
 
-docker push maxice8/alpine-container-abuild:edge-"$(uname -m)" || \
+podman push maxice8/alpine-container-abuild:edge-"$(uname -m)" || \
 	die "Failed to push 'alpine-container-abuild:edge-$(uname -m)'"
