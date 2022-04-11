@@ -3,8 +3,8 @@ let
   alpine-base = pkgs.dockerTools.pullImage
     {
       imageName = "docker.io/maxice8/alpine-container-abuild";
-      imageDigest = "sha256:4a3aadafdce5acf2c6c0189d11a10640564883a5f64d8297afc342ba15ae564c";
-      sha256 = "00xr1zjlk1vv2wnl5k0n0g40x1a7ryp9k13md73yvlsf11k16gjs";
+      imageDigest = "sha256:f587d536c227f357bed413472b1d29ebf91e8d739459a971839af62e1b499740";
+      sha256 = "04n8islfw3dp8rqz0005pzs50ww59y7kdiycnj20bqpicafviwri";
       finalImageName = "docker.io/maxice8/alpine-container-abuild";
       finalImageTag = "edge-x86_64";
     };
