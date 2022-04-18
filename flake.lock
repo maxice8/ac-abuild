@@ -154,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1650166442,
-        "narHash": "sha256-q7KhusJ0srzAjvyJD12vnV9O7hYCaJafVUegRX1w1Fw=",
+        "lastModified": 1650270927,
+        "narHash": "sha256-LG5x6OazwTwy6dBabNbrUMGm1Qx6OCB9lUvzE9mR17w=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "0158d00be82e93de58ddee4f7dad46edf3d14c91",
+        "rev": "9d51682c8654bd53d0655b7387a3d9d33522a1f4",
         "type": "github"
       },
       "original": {
@@ -169,11 +169,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1650076401,
-        "narHash": "sha256-QGxadqKWICchuuLIF2QwmHPVaUk+qO33ml5p1wW4IyA=",
+        "lastModified": 1650161686,
+        "narHash": "sha256-70ZWAlOQ9nAZ08OU6WY7n4Ij2kOO199dLfNlvO/+pf8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "75ad56bdc927f3a9f9e05e3c3614c4c1fcd99fcb",
+        "rev": "1ffba9f2f683063c2b14c9f4d12c55ad5f4ed887",
         "type": "github"
       },
       "original": {
