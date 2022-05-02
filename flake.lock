@@ -125,11 +125,11 @@
     "lc0-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1650923743,
-        "narHash": "sha256-1CaH+WRoYgFHu0VSqX2xzhSfgVaAt+rDbsiWgRLGZyE=",
+        "lastModified": 1651191394,
+        "narHash": "sha256-OXdJYq/PAEFtbY0jQnv9gdlRLYdKkWLDlIa+X/XqMzY=",
         "ref": "master",
-        "rev": "d4e38816efb370621b71e1be45e13d3ff3dfc526",
-        "revCount": 1374,
+        "rev": "d8c60f275d4a5fa6c65677a5cd43de0d66ff63e3",
+        "revCount": 1375,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/LeelaChessZero/lc0.git"
@@ -154,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1651074671,
-        "narHash": "sha256-uQnKJ66brFLTmGXh9inajFgJitTKkOPeEWgaXejujHc=",
+        "lastModified": 1651508627,
+        "narHash": "sha256-DFdguTbCzMxM8tRXuX/i0N8eNwVgPkMJ8Wyk0w0Gp7Q=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "2b57ef7caee8ebad6cfaa7ffbacea6990c916ed5",
+        "rev": "6b85fe5cd6e7bc9c8e3509b6a81fba9e6d426448",
         "type": "github"
       },
       "original": {
