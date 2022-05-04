@@ -4,11 +4,11 @@
       "flake": false,
       "locked": {
         "host": "gitlab.alpinelinux.org",
-        "lastModified": 1649145768,
-        "narHash": "sha256-jssalBSLQanBa9pMCI1XyUnf+q5euZC8VbFUbQWkxEw=",
+        "lastModified": 1651574556,
+        "narHash": "sha256-LuqJItzk5eVEMvjteFwju3UljpeOA8P6+Jjg4xP5MFw=",
         "owner": "alpine",
         "repo": "abuild",
-        "rev": "d9f03b387a02541f9d60384b6447a141765d342f",
+        "rev": "074a33546421ac3e638d1ffdd100c075e2862c78",
         "type": "gitlab"
       },
       "original": {
@@ -154,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1651508627,
-        "narHash": "sha256-DFdguTbCzMxM8tRXuX/i0N8eNwVgPkMJ8Wyk0w0Gp7Q=",
+        "lastModified": 1651622644,
+        "narHash": "sha256-4LIrBt483qtfUFAu1PqKDn2DmGDMb9my+H61KxpPETM=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "6b85fe5cd6e7bc9c8e3509b6a81fba9e6d426448",
+        "rev": "26b6c2a8dafdb630d26b546784d447b977028a73",
         "type": "github"
       },
       "original": {
@@ -169,11 +169,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1651007983,
-        "narHash": "sha256-GNay7yDPtLcRcKCNHldug85AhAvBpTtPEJWSSDYBw8U=",
+        "lastModified": 1651558728,
+        "narHash": "sha256-8HzyRnWlgZluUrVFNOfZAOlA1fghpOSezXvxhalGMUo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e10da1c7f542515b609f8dfbcf788f3d85b14936",
+        "rev": "cbe587c735b734405f56803e267820ee1559e6c1",
         "type": "github"
       },
       "original": {
