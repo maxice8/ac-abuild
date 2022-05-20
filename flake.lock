@@ -93,11 +93,11 @@
     },
     "flake-utils_2": {
       "locked": {
-        "lastModified": 1652557277,
-        "narHash": "sha256-jSes9DaIVMdmwBB78KkFUVrlDzawmD62vrUg0GS2500=",
+        "lastModified": 1652776076,
+        "narHash": "sha256-gzTw/v1vj4dOVbpBSJX4J0DwUR6LIyXo7/SuuTJp1kM=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "12806d31a381e7cd169a6bac35590e7b36dc5fe5",
+        "rev": "04c1b180862888302ddfb2e3ad9eaa63afc60cf8",
         "type": "github"
       },
       "original": {
@@ -109,11 +109,11 @@
     "kanagawa-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1651664654,
-        "narHash": "sha256-EULqF/sjExi5LhvCGphJbLzf0HYPnY1jqIkreq/WKhQ=",
+        "lastModified": 1652960060,
+        "narHash": "sha256-t9WFzKd6hkmtnti6WNFPFykrI+kxIMXrK8moWIUyWKs=",
         "owner": "rebelot",
         "repo": "kanagawa.nvim",
-        "rev": "50e7b43552072696d26757aff5f6307e2ab5e3ea",
+        "rev": "a6db77965a27ca893ea693d69cc3c152c000a627",
         "type": "github"
       },
       "original": {
@@ -125,11 +125,11 @@
     "lc0-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1652267901,
-        "narHash": "sha256-jcrNCz4yxWylnusGUn2oWeOyKo9Vc6W6aY6BMJXj5+0=",
+        "lastModified": 1652958209,
+        "narHash": "sha256-tXDElU0vB6YwrYnWYeqJzuxu7SS4UC4fZBV3mMYtnS4=",
         "ref": "refs/heads/master",
-        "rev": "bfa5b7d2ee3ea21ca4850c9278dd77564cebae22",
-        "revCount": 1377,
+        "rev": "a0d9cce06cea79b99f00b18430bf6cc4dccb0333",
+        "revCount": 1378,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/LeelaChessZero/lc0.git"
@@ -154,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1652732881,
-        "narHash": "sha256-A2GUUwevMZ+LesABI4WlAqRaAogT5zrD4I0yKH+eqpo=",
+        "lastModified": 1652980470,
+        "narHash": "sha256-A9KBC/jm7ic21VkdrjtfKacej/gpSiLN5pGUXeYt9zw=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "deeb7b81b981851542db0f1687ec1b80b75b599b",
+        "rev": "3ce374be68261337f62c4474487c9c03dc398744",
         "type": "github"
       },
       "original": {
@@ -169,11 +169,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1652794215,
-        "narHash": "sha256-erVj41IcCPDWdt8CwT60ygD+SY/uhqip3RXwiESOCVk=",
+        "lastModified": 1652885393,
+        "narHash": "sha256-YIgvvlk4iQ1Hi7KD9o5gsojc+ApB+jiH1d5stK8uXiw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "242efdc5a5aff8222c1152c0e4b9262bd02915b6",
+        "rev": "48037fd90426e44e4bf03e6479e88a11453b9b66",
         "type": "github"
       },
       "original": {
