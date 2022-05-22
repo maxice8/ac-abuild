@@ -154,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1652980470,
-        "narHash": "sha256-A9KBC/jm7ic21VkdrjtfKacej/gpSiLN5pGUXeYt9zw=",
+        "lastModified": 1653016746,
+        "narHash": "sha256-QnmoeEsp4wF3cA0hia6dK8PR01U+Z+rfyf5brBw2m3k=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "3ce374be68261337f62c4474487c9c03dc398744",
+        "rev": "6792869fb79ab8501bafe0f1c61eabbab7f1eb86",
         "type": "github"
       },
       "original": {
