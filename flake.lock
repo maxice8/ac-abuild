@@ -109,11 +109,11 @@
     "kanagawa-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1652960060,
-        "narHash": "sha256-t9WFzKd6hkmtnti6WNFPFykrI+kxIMXrK8moWIUyWKs=",
+        "lastModified": 1654867287,
+        "narHash": "sha256-bLkSJcN1L2hKAE/3ZeHyXMHGm0BN3DcoCKMLyFNMsQg=",
         "owner": "rebelot",
         "repo": "kanagawa.nvim",
-        "rev": "a6db77965a27ca893ea693d69cc3c152c000a627",
+        "rev": "6a30cab7b7c0184f06565e102420fc2b8ddaebdc",
         "type": "github"
       },
       "original": {
@@ -154,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1654628708,
-        "narHash": "sha256-H04kSatmq2rpyCQFEP7h/Zd7vrCqAZJLVYVJbZlUR1U=",
+        "lastModified": 1654921239,
+        "narHash": "sha256-eMSebDvw0vVCjaA+0xyIii5IsUNz+n4ybirjKo+BMkE=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "4d687443ff627ee71fcb5a8084b2ac5519ca45f1",
+        "rev": "8521bd288292a0a9c26c8e81f85569b1e5bd58b1",
         "type": "github"
       },
       "original": {
