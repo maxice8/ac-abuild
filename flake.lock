@@ -4,11 +4,11 @@
       "flake": false,
       "locked": {
         "host": "gitlab.alpinelinux.org",
-        "lastModified": 1651574556,
-        "narHash": "sha256-LuqJItzk5eVEMvjteFwju3UljpeOA8P6+Jjg4xP5MFw=",
+        "lastModified": 1654617117,
+        "narHash": "sha256-B7iLraVii9l7z/zQ6U3A72rDd05jxSw1wINzH5iGQv8=",
         "owner": "alpine",
         "repo": "abuild",
-        "rev": "074a33546421ac3e638d1ffdd100c075e2862c78",
+        "rev": "0ab9d5b621d0db23313f07c542a953a8cd7e98e6",
         "type": "gitlab"
       },
       "original": {
@@ -125,11 +125,11 @@
     "lc0-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1652958209,
-        "narHash": "sha256-tXDElU0vB6YwrYnWYeqJzuxu7SS4UC4fZBV3mMYtnS4=",
+        "lastModified": 1654583920,
+        "narHash": "sha256-mnrH5aMWCAmmsg2SmcKNs4HuiPMSyCPOMWAqnmV09ic=",
         "ref": "refs/heads/master",
-        "rev": "a0d9cce06cea79b99f00b18430bf6cc4dccb0333",
-        "revCount": 1378,
+        "rev": "9448145aaf636c2987737095811007947ea7826e",
+        "revCount": 1380,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/LeelaChessZero/lc0.git"
@@ -154,11 +154,11 @@
         "ydotool-src": "ydotool-src"
       },
       "locked": {
-        "lastModified": 1654379110,
-        "narHash": "sha256-Nqts2quHzanTD0gGcD7vkBsgRnVyM2hZcGIL1XfhUWI=",
+        "lastModified": 1654628708,
+        "narHash": "sha256-H04kSatmq2rpyCQFEP7h/Zd7vrCqAZJLVYVJbZlUR1U=",
         "owner": "maxice8",
         "repo": "nix-overlay",
-        "rev": "98d91b13e356aab223ec77e06bb374e672c63a2b",
+        "rev": "4d687443ff627ee71fcb5a8084b2ac5519ca45f1",
         "type": "github"
       },
       "original": {
@@ -169,11 +169,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1654230545,
-        "narHash": "sha256-8Vlwf0x8ow6pPOK2a04bT+pxIeRnM1+O0Xv9/CuDzRs=",
+        "lastModified": 1654682581,
+        "narHash": "sha256-Jb1PQCwKgwdNAp907eR5zPzuxV+kRroA3UIxUxCMJ9s=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "236cc2971ac72acd90f0ae3a797f9f83098b17ec",
+        "rev": "e0169d7a9d324afebf5679551407756c77af8930",
         "type": "github"
       },
       "original": {
